@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Feliz Cumpleaños, Mi Natis! 🎃💀</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Creepster&family=Montserrat:wght@300;400;600;700&family=Ruthie&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        jack: {
+                            dark: '#0a0512',
+                            purple: '#241235',
+                            accent: '#8b5cf6',
+                            neon: '#a855f7',
+                            bone: '#f3f4f6',
+                            glow: '#d8b4fe',
+                            green: '#22c55e'
+                        }
+                    },
+                    fontFamily: {
+                        gothic: ['"Cinzel Decorative"', 'serif'],
+                        spooky: ['Creepster', 'cursive'],
+                        handwriting: ['Ruthie', 'cursive'],
+                        sans: ['Montserrat', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background: radial-gradient(circle at center, #1e0b2e 0%, #0a0512 100%);
+            color: #f3f4f6;
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0512;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #5b21b6;
+            border-radius: 4px;
+        }
+
+        .text-glow {
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.7), 0 0 20px rgba(168, 85, 247, 0.4);
+        }
+
+        .text-glow-green {
+            text-shadow: 0 0 10px rgba(34, 197, 94, 0.8), 0 0 20px rgba(34, 197, 94, 0.4);
+        }
+
+        @keyframes flicker {
+            0%, 100% {
+                transform: scale(1) rotate(-2deg);
+                opacity: 0.9;
+            }
+
+            20% {
+                transform: scale(1.1) rotate(2deg);
+                opacity: 1;
+            }
+
+            40% {
+                transform: scale(0.95) rotate(-1deg);
+                opacity: 0.8;
+            }
+
+            60% {
+                transform: scale(1.05) rotate(1deg);
+                opacity: 1;
+            }
+
+            80% {
+                transform: scale(0.98) rotate(-2deg);
+                opacity: 0.85;
+            }
+        }
+
+        .flame {
+            animation: flicker 1.2s infinite ease-in-out;
+            transform-origin: center bottom;
+            box-shadow: 0 0 15px #f59e0b, 0 0 25px #ef4444;
+        }
+
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-15px) rotate(3deg);
+            }
+        }
+
+        .parchment {
+            background: #180e29;
+            border: 2px solid #6b21a8;
+            box-shadow: 0 0 25px rgba(139, 92, 246, 0.2), inset 0 0 40px rgba(0, 0, 0, 0.8);
+            position: relative;
+        }
+
+        .parchment::before {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            border: 1px dashed #4c1d95;
+            pointer-events: none;
+        }
+
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+
+        .transform-style-3d {
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+
+<body class="relative min-h-screen">
+
+    <!-- Floating Spooky Particles Canvas -->
+    <canvas id="ambientCanvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- ================================================= -->
+    <!-- MÚSICA REAL -->
+    <!-- ================================================= -->
+
+    <audio id="backgroundMusic" loop preload="auto">
+        <source src="./audio/jack.mp3.mp3" type="audio/mpeg">
+        Tu navegador no soporta audio HTML5.
+    </audio>
+
+    <!-- Music Control Float Button -->
+    <div class="fixed top-5 right-5 z-50">
+        <button
+            id="musicToggle"
+            onclick="toggleAudio()"
+            class="flex items-center gap-2 bg-jack-purple/80 hover:bg-jack-accent text-white px-4 py-2 rounded-full border border-jack-neon/50 backdrop-blur-md transition-all shadow-lg text-sm font-semibold hover:scale-105 active:scale-95">
+
+            <i id="musicIcon" class="fas fa-music text-jack-neon"></i>
+
+            <span id="musicText">
+                Música Spooky 🎵
+            </span>
+
+        </button>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="relative z-10 max-w-5xl mx-auto px-4 py-8 flex flex-col gap-20">
+
+        <!-- 1. HERO SECTION -->
+        <section class="min-h-[85vh] flex flex-col items-center justify-center text-center relative pt-10">
+
+            <!-- Jack Skellington SVG Head with Party Hat -->
+            <div class="relative w-48 h-48 md:w-64 md:h-64 mb-6 floating">
+
+                <svg
+                    viewBox="0 0 200 200"
+                    class="w-full h-full filter drop-shadow-[0_0_20px_rgba(168,85,247,0.5)]">
+
+                    <!-- Party Hat -->
+                    <path
+                        d="M 100 10 L 145 75 L 55 75 Z"
+                        fill="#6b21a8"
+                        stroke="#a855f7"
+                        stroke-width="3"/>
+
+                    <circle
+                        cx="100"
+                        cy="10"
+                        r="10"
+                        fill="#f3f4f6"/>
+
+                    <path
+                        d="M 65 60 L 80 75 M 90 40 L 110 75 M 120 30 L 135 60"
+                        stroke="#f3f4f6"
+                        stroke-width="2"/>
+
+                    <!-- Head Circle -->
+                    <circle
+                        cx="100"
+                        cy="120"
+                        r="70"
+                        fill="#f3f4f6"
+                        stroke="#111827"
+                        stroke-width="4"/>
+
+                    <!-- Eyes -->
+                    <ellipse
+                        cx="75"
+                        cy="110"
+                        rx="18"
+                        ry="24"
+                        fill="#0a0512"
+                        transform="rotate(-10 75 110)"/>
+
+                    <ellipse
+                        cx="125"
+                        cy="110"
+                        rx="18"
+                        ry="24"
+                        fill="#0a0512"
+                        transform="rotate(10 125 110)"/>
+
+                    <!-- Nose -->
+                    <polygon
+                        points="96,122 93,132 99,132"
+                        fill="#0a0512"/>
+
+                    <polygon
+                        points="104,122 101,132 107,132"
+                        fill="#0a0512"/>
+
+                    <!-- Stitched Smile -->
+                    <path
+                        d="M 50 145 Q 100 180 150 145"
+                        fill="none"
+                        stroke="#0a0512"
+                        stroke-width="4"
+                        stroke-linecap="round"/>
+
+                    <!-- Stitches -->
+                    <line x1="60" y1="147" x2="62" y2="157" stroke="#0a0512" stroke-width="3"/>
+                    <line x1="75" y1="153" x2="77" y2="163" stroke="#0a0512" stroke-width="3"/>
+                    <line x1="90" y1="156" x2="91" y2="166" stroke="#0a0512" stroke-width="3"/>
+                    <line x1="105" y1="156" x2="105" y2="166" stroke="#0a0512" stroke-width="3"/>
+                    <line x1="120" y1="154" x2="119" y2="164" stroke="#0a0512" stroke-width="3"/>
+                    <line x1="135" y1="149" x2="133" y2="159" stroke="#0a0512" stroke-width="3"/>
+
+                </svg>
+
+                <!-- Bat Tie Decor -->
+                <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-28 h-10">
+
+                    <svg
+                        viewBox="0 0 100 40"
+                        class="w-full h-full fill-black stroke-purple-500 stroke-1">
+
+                        <path
+                            d="M 50 20 Q 30 0 0 10 Q 25 25 35 38 Q 50 25 65 38 Q 75 25 100 10 Q 70 0 50 20 Z"/>
+
+                        <circle
+                            cx="50"
+                            cy="20"
+                            r="5"
+                            fill="#f3f4f6"/>
+
+                    </svg>
+
+                </div>
+
+            </div>
+
+            <!-- Title & Subtitle -->
+            <h1 class="font-gothic text-3xl sm:text-5xl md:text-6xl font-bold text-jack-bone text-glow mb-4 tracking-wider">
+                ¡Feliz Cumpleaños, Mi Princesa!
+            </h1>
+
+            <p class="font-sans text-lg md:text-xl text-purple-200/90 max-w-2xl mb-8 leading-relaxed font-light">
+                Un año más en este extraño y maravilloso mundo... Preparé este rincón oscuro y especial solo para ti. 🖤🎃
+            </p>
+
+            <!-- CTA Button -->
+            <a
+                href="#cakeSection"
+                class="group relative inline-flex items-center gap-3 px-8 py-4 bg-jack-purple border-2 border-jack-neon rounded-full text-jack-bone font-bold text-lg shadow-[0_0_15px_rgba(168,85,247,0.4)] hover:shadow-[0_0_30px_rgba(168,85,247,0.8)] hover:bg-jack-accent transition-all duration-300 transform hover:-translate-y-1">
+
+                <span>Descubrir Tu Sorpresa</span>
+
+                <i class="fas fa-chevron-down text-jack-neon group-hover:translate-y-1 transition-transform"></i>
+
+            </a>
+
+        </section>
+
+        <!-- 2. INTERACTIVE CAKE SECTION -->
+        <section
+            id="cakeSection"
+            class="scroll-mt-10 flex flex-col items-center text-center">
+
+            <div class="mb-6">
+
+                <span class="text-jack-neon font-spooky text-2xl tracking-widest uppercase">
+                    Pedir un Deseo
+                </span>
+
+                <h2 class="font-gothic text-3xl md:text-4xl text-jack-bone mt-1 text-glow">
+                    El Pastel del Extraño Mundo
+                </h2>
+
+                <p class="text-gray-400 text-sm mt-2">
+                    Haz clic en las velas o pulsa el botón para soplarlas y pedir tu deseo ✨
+                </p>
+
+            </div>
+
+            <!-- Interactive SVG Cake Container -->
+            <div class="relative w-full max-w-md my-8 flex justify-center items-center">
+
+                <div class="relative flex flex-col items-center">
+
+                    <!-- VELAS -->
+                    <div id="candlesRow" class="flex gap-6 z-20 -mb-2">
+
+                        <!-- Candle 1 -->
+                        <div
+                            class="candle flex flex-col items-center cursor-pointer"
+                            onclick="blowOutSingleCandle(this)">
+
+                            <div class="flame w-4 h-6 bg-amber-400 rounded-full border border-orange-500"></div>
+
+                            <div class="w-3 h-10 bg-gradient-to-b from-gray-200 to-gray-400 rounded-t-sm border border-black/50 relative">
+
+                                <div class="absolute inset-x-0 top-2 h-1 bg-purple-900/40"></div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Candle 2 -->
+                        <div
+                            class="candle flex flex-col items-center cursor-pointer"
+                            onclick="blowOutSingleCandle(this)">
+
+                            <div class="flame w-4 h-6 bg-amber-400 rounded-full border border-orange-500"></div>
+
+                            <div class="w-3 h-12 bg-gradient-to-b from-purple-300 to-purple-500 rounded-t-sm border border-black/50 relative">
+
+                                <div class="absolute inset-x-0 top-3 h-1 bg-black/40"></div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Candle 3 -->
+                        <div
+                            class="candle flex flex-col items-center cursor-pointer"
+                            onclick="blowOutSingleCandle(this)">
+
+                            <div class="flame w-4 h-6 bg-amber-400 rounded-full border border-orange-500"></div>
+
+                            <div class="w-3 h-10 bg-gradient-to-b from-gray-200 to-gray-400 rounded-t-sm border border-black/50 relative">
+
+                                <div class="absolute inset-x-0 top-2 h-1 bg-purple-900/40"></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- TIER 1 -->
+                    <div class="w-40 h-20 bg-gradient-to-r from-purple-950 via-purple-900 to-purple-950 rounded-t-lg border-2 border-purple-600/50 relative flex items-center justify-center shadow-lg">
+
+                        <div class="absolute top-0 inset-x-0 h-4 bg-jack-bone rounded-t-lg border-b-2 border-purple-900 flex justify-around">
+
+                            <div class="w-3 h-4 bg-jack-bone rounded-b-full"></div>
+                            <div class="w-4 h-6 bg-jack-bone rounded-b-full"></div>
+                            <div class="w-2 h-3 bg-jack-bone rounded-b-full"></div>
+                            <div class="w-4 h-5 bg-jack-bone rounded-b-full"></div>
+
+                        </div>
+
+                        <div class="w-8 h-8 rounded-full bg-jack-bone border border-black flex items-center justify-center mt-3 shadow">
+
+                            <div class="w-6 h-6 relative">
+
+                                <div class="absolute top-1 left-0.5 w-2 h-2.5 bg-black rounded-full"></div>
+                                <div class="absolute top-1 right-0.5 w-2 h-2.5 bg-black rounded-full"></div>
+                                <div class="absolute bottom-1 inset-x-0 h-0.5 bg-black"></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- TIER 2 -->
+                    <div class="w-56 h-24 bg-gradient-to-r from-gray-950 via-black to-gray-950 rounded-t-lg border-2 border-purple-600/50 relative flex items-center justify-center shadow-xl -mt-1">
+
+                        <div class="absolute inset-0 opacity-20 bg-[linear-gradient(90deg,transparent_50%,#8b5cf6_50%)] bg-[length:20px_100%]"></div>
+
+                        <div class="z-10 text-purple-400 font-gothic text-xs tracking-widest border-y border-purple-500/40 px-4 py-1">
+                            ☠️ HAPPY BIRTHDAY ☠️
+                        </div>
+
+                    </div>
+
+                    <!-- TIER 3 -->
+                    <div class="w-72 h-28 bg-gradient-to-r from-purple-950 via-purple-900 to-purple-950 rounded-t-xl border-2 border-purple-500/60 relative flex items-center justify-center shadow-2xl -mt-1">
+
+                        <i class="fas fa-spider absolute bottom-2 left-4 text-purple-400/50 text-xl"></i>
+
+                        <i class="fas fa-ghost absolute bottom-2 right-4 text-purple-400/50 text-xl"></i>
+
+                        <div class="text-jack-bone font-handwriting text-2xl text-glow-green">
+                            Forever & Always
+                        </div>
+
+                    </div>
+
+                    <!-- Cake Stand -->
+                    <div class="w-80 h-4 bg-gradient-to-r from-gray-400 via-gray-100 to-gray-400 rounded-full border border-gray-600 shadow-2xl"></div>
+
+                    <div class="w-48 h-5 bg-gradient-to-r from-gray-700 via-gray-500 to-gray-700 rounded-b-xl border-x border-b border-gray-800"></div>
+
+                </div>
+
+            </div>
+
+            <!-- Candle Blow Action Button -->
+            <button
+                id="blowBtn"
+                onclick="blowOutAllCandles()"
+                class="mt-4 px-6 py-3 bg-gradient-to-r from-purple-700 to-indigo-800 hover:from-purple-600 hover:to-indigo-700 text-white font-semibold rounded-full border border-purple-400/40 shadow-lg flex items-center gap-2 transition-all transform hover:scale-105 active:scale-95">
+
+                <i class="fas fa-wind text-purple-300"></i>
+
+                <span>¡Soplar Las Velas!</span>
+
+            </button>
+
+            <!-- Hidden Birthday Wish Message -->
+            <div
+                id="wishMessage"
+                class="hidden mt-6 p-4 max-w-md bg-purple-950/80 border border-purple-500/50 rounded-2xl backdrop-blur-md animate-fade-in shadow-2xl">
+
+                <p class="font-spooky text-2xl text-jack-green tracking-wide">
+                    ¡Deseo Concedido! 🎃✨
+                </p>
+
+                <p class="text-sm text-gray-200 mt-1">
+                    Que cada uno de tus sueños se vuelva realidad en este nuevo ciclo.
+                    ¡Eres el tesoro más grande de mi mundo!
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- 3. CARTA DE AMOR -->
+        <section id="letterSection" class="scroll-mt-10 max-w-3xl mx-auto w-full">
+
+            <div class="text-center mb-8">
+
+                <span class="text-jack-neon font-spooky text-2xl tracking-widest uppercase">
+                    Desde el Corazón
+                </span>
+
+                <h2 class="font-gothic text-3xl md:text-4xl text-jack-bone mt-1 text-glow">
+                    Una Carta Para Mi Amor
+                </h2>
+
+            </div>
+
+            <div class="parchment rounded-2xl p-6 sm:p-10 relative overflow-hidden">
+
+                <div class="absolute -top-6 -left-6 text-purple-600/30 text-6xl pointer-events-none">
+                    <i class="fas fa-spider"></i>
+                </div>
+
+                <div class="absolute -bottom-6 -right-6 text-purple-600/30 text-6xl pointer-events-none">
+                    <i class="fas fa-spider"></i>
+                </div>
+
+                <div class="flex justify-between items-center border-b border-purple-800/60 pb-4 mb-6">
+
+                    <span class="font-gothic text-sm text-purple-300 tracking-widest">
+                        NOCHE DE CUMPLEAÑOS
+                    </span>
+
+                    <i class="fas fa-heart text-purple-500 animate-pulse"></i>
+
+                </div>
+
+                <div class="min-h-[220px] text-gray-200 leading-relaxed font-sans text-base md:text-lg space-y-4">
+
+                    <p class="font-handwriting text-3xl text-jack-glow mb-2">
+                        Mi querid@ compañero/a de aventuras,
+                    </p>
+
+                    <div id="typewriterText" class="inline">
+                    </div>
+
+                </div>
+
+                <div class="mt-8 flex justify-end">
+
+                    <button
+                        onclick="startTypewriter()"
+                        class="text-xs font-semibold text-purple-300 hover:text-white flex items-center gap-1 bg-purple-900/40 hover:bg-purple-800/60 px-3 py-1.5 rounded-lg border border-purple-500/30 transition-all">
+
+                        <i class="fas fa-redo text-xs"></i>
+
+                        <span>Leer de nuevo</span>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- 4. NUESTROS MOMENTOS ESPECIALES -->
+        <section id="momentsSection" class="scroll-mt-10">
+
+            <div class="text-center mb-12">
+
+                <span class="text-jack-neon font-spooky text-2xl tracking-widest uppercase">
+                    Nuestra Historia
+                </span>
+
+                <h2 class="font-gothic text-3xl md:text-4xl text-jack-bone mt-1 text-glow">
+                    Momentos Inolvidables
+                </h2>
+
+                <p class="text-gray-400 text-sm mt-2">
+                    Haz clic en cada tarjeta para girarla y descubrir el recuerdo 🖤
+                </p>
+
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                <!-- CARD 1 -->
+                <div
+                    class="perspective-1000 h-72 cursor-pointer group"
+                    onclick="flipCard(this)">
+
+                    <div class="transform-style-3d relative w-full h-full duration-700 rounded-2xl shadow-xl">
+
+                        <!-- FRONT -->
+                        <div
+                            class="absolute inset-0 backface-hidden bg-gradient-to-br from-jack-purple to-black border-2 border-purple-700/60 rounded-2xl overflow-hidden">
+
+                            <div class="h-44 w-full overflow-hidden bg-black flex items-center justify-center">
+
+                                <img
+                                    src="img/recuerdo1.jpg"
+                                    alt="Nuestro primer encuentro"
+                                    class="w-full h-full object-contain transition duration-500 group-hover:scale-105">
+
+                            </div>
+
+                            <div class="p-3 flex flex-col items-center text-center">
+
+                                <span class="text-xs font-mono text-purple-300 uppercase tracking-widest">
+                                    Recuerdo I
+                                </span>
+
+                                <h3 class="font-gothic text-xl text-jack-bone mt-1">
+                                    El Inicio de Todo
+                                </h3>
+
+                                <span class="text-xs text-purple-400/80 flex items-center gap-1 mt-2">
+
+                                    <i class="fas fa-hand-pointer"></i>
+
+                                    Haz clic para voltear
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <!-- BACK -->
+                        <div
+                            class="absolute inset-0 backface-hidden rotate-y-180 bg-purple-950 border-2 border-jack-neon rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+
+                            <p class="font-handwriting text-2xl text-jack-glow mb-2">
+                                Nuestro Primer Encuentro
+                            </p>
+
+                            <p class="text-xs text-gray-300 leading-relaxed">
+                                "Desde el primer momento supe que tenías algo especial.
+                                Como cuando Jack descubrió la Ciudad de la Navidad,
+                                ¡mi mundo se llenó de luces y colores!"
+                            </p>
+
+                            <i class="fas fa-star text-amber-400 text-sm mt-4"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- CARD 2 -->
+                <div
+                    class="perspective-1000 h-72 cursor-pointer group"
+                    onclick="flipCard(this)">
+
+                    <div class="transform-style-3d relative w-full h-full duration-700 rounded-2xl shadow-xl">
+
+                        <!-- FRONT -->
+                        <div
+                            class="absolute inset-0 backface-hidden bg-gradient-to-br from-jack-purple to-black border-2 border-purple-700/60 rounded-2xl overflow-hidden">
+
+                            <div class="h-44 w-full overflow-hidden bg-black flex items-center justify-center">
+
+                                <img
+                                    src="img/recuerdo2.jpg"
+                                    alt="Noches inolvidables"
+                                    class="w-full h-full object-contain transition duration-500 group-hover:scale-105">
+
+                            </div>
+
+                            <div class="p-3 flex flex-col items-center text-center">
+
+                                <span class="text-xs font-mono text-purple-300 uppercase tracking-widest">
+                                    Recuerdo II
+                                </span>
+
+                                <h3 class="font-gothic text-xl text-jack-bone mt-1">
+                                    Noches Inolvidables
+                                </h3>
+
+                                <span class="text-xs text-purple-400/80 flex items-center gap-1 mt-2">
+
+                                    <i class="fas fa-hand-pointer"></i>
+
+                                    Haz clic para voltear
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <!-- BACK -->
+                        <div
+                            class="absolute inset-0 backface-hidden rotate-y-180 bg-purple-950 border-2 border-jack-neon rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+
+                            <p class="font-handwriting text-2xl text-jack-glow mb-2">
+                                Risas y Secretos
+                            </p>
+
+                            <p class="text-xs text-gray-300 leading-relaxed">
+                                "Nuestras pláticas infinitas a medianoche,
+                                las risas compartidas y cada pequeño detalle
+                                que nos hace ser únicos juntos."
+                            </p>
+
+                            <i class="fas fa-heart text-purple-400 text-sm mt-4"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- CARD 3 -->
+                <div
+                    class="perspective-1000 h-72 cursor-pointer group"
+                    onclick="flipCard(this)">
+
+                    <div class="transform-style-3d relative w-full h-full duration-700 rounded-2xl shadow-xl">
+
+                        <!-- FRONT -->
+                        <div
+                            class="absolute inset-0 backface-hidden bg-gradient-to-br from-jack-purple to-black border-2 border-purple-700/60 rounded-2xl overflow-hidden">
+
+                            <div class="h-44 w-full overflow-hidden bg-black flex items-center justify-center">
+
+                                <img
+                                    src="img/recuerdo3.jpg"
+                                    alt="Jack y Sally"
+                                    class="w-full h-full object-contain transition duration-500 group-hover:scale-105">
+
+                            </div>
+
+                            <div class="p-3 flex flex-col items-center text-center">
+
+                                <span class="text-xs font-mono text-purple-300 uppercase tracking-widest">
+                                    Recuerdo III
+                                </span>
+
+                                <h3 class="font-gothic text-xl text-jack-bone mt-1">
+                                    Jack & Sally
+                                </h3>
+
+                                <span class="text-xs text-purple-400/80 flex items-center gap-1 mt-2">
+
+                                    <i class="fas fa-hand-pointer"></i>
+
+                                    Haz clic para voltear
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <!-- BACK -->
+                        <div
+                            class="absolute inset-0 backface-hidden rotate-y-180 bg-purple-950 border-2 border-jack-neon rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+
+                            <p class="font-handwriting text-2xl text-jack-glow mb-2">
+                                Simplemente Destinados
+                            </p>
+
+                            <p class="text-xs text-gray-300 leading-relaxed">
+                                "Por siempre y para siempre, tú y yo tomados de la mano
+                                contemplando la luna en la colina espiral.
+                                ¡Feliz vida, amor!"
+                            </p>
+
+                            <i class="fas fa-infinity text-jack-green text-sm mt-4"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- 5. VIDEO ESPECIAL -->
+        <!-- ========================================================= -->
+
+        <style>
+
+            .video-section {
+                position: relative;
+                width: 100%;
+                max-width: 900px;
+                margin: 0 auto;
+            }
+
+            .video-frame {
+                position: relative;
+                padding: 8px;
+                border-radius: 24px;
+
+                background: linear-gradient(
+                    135deg,
+                    #4c1d95,
+                    #a855f7,
+                    #241235,
+                    #6b21a8
+                );
+
+                box-shadow:
+                    0 0 20px rgba(168, 85, 247, 0.35),
+                    0 0 50px rgba(139, 92, 246, 0.15);
+
+                animation: videoGlow 4s ease-in-out infinite;
+            }
+
+            .video-container {
+                position: relative;
+                overflow: hidden;
+                border-radius: 18px;
+                background: #050208;
+                border: 1px solid rgba(216, 180, 254, 0.25);
+            }
+
+            .video-container video {
+                display: block;
+                width: 100%;
+                height: auto;
+                max-height: 600px;
+                object-fit: contain;
+                background: #050208;
+            }
+
+            .video-decoration {
+                position: absolute;
+                color: rgba(168, 85, 247, 0.5);
+                pointer-events: none;
+                z-index: 5;
+            }
+
+            .video-decoration.top-left {
+                top: -22px;
+                left: -18px;
+                font-size: 42px;
+                transform: rotate(-20deg);
+            }
+
+            .video-decoration.top-right {
+                top: -20px;
+                right: -15px;
+                font-size: 38px;
+                transform: rotate(20deg);
+            }
+
+            .video-decoration.bottom-left {
+                bottom: -22px;
+                left: -15px;
+                font-size: 38px;
+                transform: rotate(15deg);
+            }
+
+            .video-decoration.bottom-right {
+                bottom: -20px;
+                right: -15px;
+                font-size: 42px;
+                transform: rotate(-15deg);
+            }
+
+            .video-corner {
+                position: absolute;
+                width: 35px;
+                height: 35px;
+                border-color: #a855f7;
+                opacity: 0.7;
+                pointer-events: none;
+                z-index: 6;
+            }
+
+            .video-corner.top-left {
+                top: 15px;
+                left: 15px;
+                border-top: 2px solid;
+                border-left: 2px solid;
+            }
+
+            .video-corner.top-right {
+                top: 15px;
+                right: 15px;
+                border-top: 2px solid;
+                border-right: 2px solid;
+            }
+
+            .video-corner.bottom-left {
+                bottom: 15px;
+                left: 15px;
+                border-bottom: 2px solid;
+                border-left: 2px solid;
+            }
+
+            .video-corner.bottom-right {
+                bottom: 15px;
+                right: 15px;
+                border-bottom: 2px solid;
+                border-right: 2px solid;
+            }
+
+            @keyframes videoGlow {
+
+                0%, 100% {
+                    box-shadow:
+                        0 0 20px rgba(168, 85, 247, 0.35),
+                        0 0 50px rgba(139, 92, 246, 0.15);
+                }
+
+                50% {
+                    box-shadow:
+                        0 0 30px rgba(168, 85, 247, 0.55),
+                        0 0 70px rgba(139, 92, 246, 0.25);
+                }
+
+            }
+
+            .video-reveal {
+                animation: videoReveal 1.2s ease-out both;
+            }
+
+            @keyframes videoReveal {
+
+                from {
+                    opacity: 0;
+                    transform: translateY(40px) scale(0.97);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0) scale(1);
+                }
+
+            }
+
+            @media (max-width: 640px) {
+
+                .video-frame {
+                    padding: 5px;
+                    border-radius: 18px;
+                }
+
+                .video-container {
+                    border-radius: 14px;
+                }
+
+                .video-decoration {
+                    opacity: 0.25;
+                }
+
+                .video-decoration.top-left,
+                .video-decoration.bottom-right {
+                    font-size: 30px;
+                }
+
+                .video-decoration.top-right,
+                .video-decoration.bottom-left {
+                    font-size: 26px;
+                }
+
+                .video-corner {
+                    width: 25px;
+                    height: 25px;
+                }
+
+            }
+
+        </style>
+
+        <section id="videoSection" class="scroll-mt-10">
+
+            <!-- TÍTULO -->
+            <div class="text-center mb-10">
+
+                <span class="text-jack-neon font-spooky text-2xl tracking-widest uppercase">
+                    Un Regalo Para Ti
+                </span>
+
+                <h2 class="font-gothic text-3xl md:text-4xl text-jack-bone mt-1 text-glow">
+                    Un Momento Especial
+                </h2>
+
+                <p class="text-gray-400 text-sm mt-2 max-w-xl mx-auto">
+                    Porque algunos recuerdos merecen quedarse para siempre... 🖤🎃
+                </p>
+
+            </div>
+
+            <!-- CONTENEDOR DEL VIDEO -->
+            <div class="video-section video-reveal">
+
+                <!-- DECORACIONES -->
+                <div class="video-decoration top-left">
+                    <i class="fas fa-spider"></i>
+                </div>
+
+                <div class="video-decoration top-right">
+                    <i class="fas fa-ghost"></i>
+                </div>
+
+                <div class="video-decoration bottom-left">
+                    <i class="fas fa-bone"></i>
+                </div>
+
+                <div class="video-decoration bottom-right">
+                    <i class="fas fa-heart"></i>
+                </div>
+
+                <!-- MARCO DEL VIDEO -->
+                <div class="video-frame">
+
+                    <div class="video-container">
+
+                        <!-- ESQUINAS DECORATIVAS -->
+                        <div class="video-corner top-left"></div>
+                        <div class="video-corner top-right"></div>
+                        <div class="video-corner bottom-left"></div>
+                        <div class="video-corner bottom-right"></div>
+
+                        <!-- VIDEO -->
+                        <video
+                            controls
+                            playsinline
+                            preload="metadata"
+                            poster="./img/imgposter-video.jpg.mp4">
+
+                            <source
+                                src="./video/cumpleanos.mp4.mp4"
+                                type="video/mp4">
+
+                            Tu navegador no puede reproducir este video.
+
+                        </video>
+
+                    </div>
+
+                </div>
+
+                <br><br>    
+
+                <!-- MENSAJE -->
+                <div class="text-center mt-8">
+
+                    <p class="font-handwriting text-3xl text-jack-glow text-glow">
+                        Para ti, mi Natis 🖤
+                    </p>
+
+                    <p class="text-sm text-gray-400 mt-2 max-w-lg mx-auto leading-relaxed">
+                        Un pequeño recuerdo hecho especialmente para ti,
+                        porque quiero que cada momento bonito tenga un lugar
+                        en nuestra historia.
+                    </p>
+
+                    <div class="flex justify-center items-center gap-3 mt-5 text-purple-400/70">
+
+                        <span class="w-12 h-px bg-purple-700"></span>
+
+                        <i class="fas fa-heart text-purple-500"></i>
+
+                        <span class="w-12 h-px bg-purple-700"></span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <br><br><br><br>
+
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="text-center border-t border-purple-900/50 pt-8 pb-12">
+
+            <p class="font-gothic text-lg text-jack-bone mb-2">
+                "My dearest friend, if you don't mind... I'd like to join you by your side."
+            </p>
+
+            <p class="text-xs text-purple-400/70 font-sans">
+                Hecho con 🖤 especialmente para ti en tu cumpleaños.
+                ATT: Fabian Carvajal (Ojitos &lt;3)
+            </p>
+
+        </footer>
+
+    </div>
+
+    <!-- JAVASCRIPT CODE -->
+    <script>
+
+        // ==========================================
+        // 1. AMBIENT BACKGROUND PARTICLES
+        // ==========================================
+
+        const canvas = document.getElementById('ambientCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let particles = [];
+
+        function resizeCanvas() {
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+
+        resizeCanvas();
+
+        class Particle {
+
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+
+                this.size = Math.random() * 3 + 1;
+
+                this.speedY = -(Math.random() * 0.5 + 0.2);
+
+                this.speedX = (Math.random() - 0.5) * 0.3;
+
+                this.opacity = Math.random() * 0.5 + 0.2;
+
+                this.color =
+                    Math.random() > 0.5
+                    ? '#a855f7'
+                    : '#22c55e';
+
+            }
+
+            update() {
+
+                this.y += this.speedY;
+                this.x += this.speedX;
+
+                if (this.y < 0) {
+                    this.y = canvas.height;
+                }
+
+                if (this.x < 0 || this.x > canvas.width) {
+                    this.x = Math.random() * canvas.width;
+                }
+
+            }
+
+            draw() {
+
+                ctx.save();
+
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = this.color;
+
+                ctx.beginPath();
+
+                ctx.arc(
+                    this.x,
+                    this.y,
+                    this.size,
+                    0,
+                    Math.PI * 2
+                );
+
+                ctx.fill();
+
+                ctx.restore();
+
+            }
+
+        }
+
+        for (let i = 0; i < 40; i++) {
+
+            particles.push(
+                new Particle()
+            );
+
+        }
+
+        function animateParticles() {
+
+            ctx.clearRect(
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+            particles.forEach(p => {
+
+                p.update();
+                p.draw();
+
+            });
+
+            requestAnimationFrame(
+                animateParticles
+            );
+
+        }
+
+        animateParticles();
+
+
+        // ==========================================
+        // 2. INTERACTIVE CAKE CANDLE BLOWING
+        // ==========================================
+
+        let candlesBlown = 0;
+
+        const totalCandles = 3;
+
+        function triggerSpookyConfetti() {
+
+            confetti({
+
+                particleCount: 80,
+
+                spread: 100,
+
+                origin: {
+                    y: 0.6
+                },
+
+                colors: [
+                    '#8b5cf6',
+                    '#a855f7',
+                    '#22c55e',
+                    '#f3f4f6',
+                    '#1e1b4b'
+                ]
+
+            });
+
+        }
+
+        function blowOutSingleCandle(candleEl) {
+
+            const flame =
+                candleEl.querySelector('.flame');
+
+            if (
+                flame &&
+                flame.style.display !== 'none'
+            ) {
+
+                flame.style.display = 'none';
+
+                candlesBlown++;
+
+                triggerSpookyConfetti();
+
+                playTone(
+                    300,
+                    'sine',
+                    0.1
+                );
+
+                if (
+                    candlesBlown >= totalCandles
+                ) {
+
+                    showBirthdayWish();
+
+                }
+
+            }
+
+        }
+
+        function blowOutAllCandles() {
+
+            const flames =
+                document.querySelectorAll('.flame');
+
+            flames.forEach(
+                f => f.style.display = 'none'
+            );
+
+            candlesBlown =
+                totalCandles;
+
+            triggerSpookyConfetti();
+
+            setTimeout(
+                triggerSpookyConfetti,
+                300
+            );
+
+            playTone(
+                440,
+                'triangle',
+                0.3
+            );
+
+            showBirthdayWish();
+
+        }
+
+        function showBirthdayWish() {
+
+            const wishMsg =
+                document.getElementById(
+                    'wishMessage'
+                );
+
+            wishMsg.classList.remove(
+                'hidden'
+            );
+
+            const blowBtn =
+                document.getElementById(
+                    'blowBtn'
+                );
+
+            blowBtn.classList.add(
+                'opacity-50',
+                'pointer-events-none'
+            );
+
+            blowBtn.innerText =
+                "¡Velas Sopladas! 🎃";
+
+        }
+
+
+        // ==========================================
+        // 3. CARD FLIP LOGIC
+        // ==========================================
+
+        function flipCard(cardWrapper) {
+
+            const innerCard =
+                cardWrapper.querySelector(
+                    '.transform-style-3d'
+                );
+
+            innerCard.classList.toggle(
+                'rotate-y-180'
+            );
+
+            playTone(
+                523.25,
+                'sine',
+                0.1
+            );
+
+        }
+
+
+        // ==========================================
+        // 4. TYPEWRITER EFFECT
+        // ==========================================
+
+        const letterFullText =
+            `Si tuviera que recorrer mil mundos oscuros, mil bosques encantados y mil noches de luna llena, te elegira a ti una y otra vez. Eres la luz brillante en mi noche mas oscura, la melodia que hace bailar a mi corazon y mi persona favorita en todo el universo. Que este nuevo ano de vida te traiga tantas alegrias, risas y magia como las que tu le regalas a mi vida todos los dias. ¡Te amo con toda mi alma!`;
+
+        let typewriterIndex = 0;
+
+        let isTyping = false;
+
+        function startTypewriter() {
+
+            const container =
+                document.getElementById(
+                    'typewriterText'
+                );
+
+            container.innerHTML = '';
+
+            typewriterIndex = 0;
+
+            if (isTyping) {
+                return;
+            }
+
+            isTyping = true;
+
+            function typeNextChar() {
+
+                if (
+                    typewriterIndex <
+                    letterFullText.length
+                ) {
+
+                    container.innerHTML +=
+                        letterFullText.charAt(
+                            typewriterIndex
+                        );
+
+                    typewriterIndex++;
+
+                    setTimeout(
+                        typeNextChar,
+                        35
+                    );
+
+                } else {
+
+                    isTyping = false;
+
+                }
+
+            }
+
+            typeNextChar();
+
+        }
+
+
+        // ==========================================
+        // 5. MÚSICA REAL
+        // ==========================================
+
+        const backgroundMusic =
+            document.getElementById(
+                'backgroundMusic'
+            );
+
+        let isPlaying = false;
+
+
+        // ==========================================
+        // SONIDOS PEQUEÑOS DE LA PÁGINA
+        // Se mantiene playTone para las velas
+        // y las tarjetas.
+        // ==========================================
+
+        let audioCtx = null;
+
+        function initAudio() {
+
+            if (!audioCtx) {
+
+                audioCtx =
+                    new (
+                        window.AudioContext ||
+                        window.webkitAudioContext
+                    )();
+
+            }
+
+        }
+
+        function playTone(
+            freq,
+            type = 'sine',
+            duration = 0.2
+        ) {
+
+            try {
+
+                initAudio();
+
+                if (
+                    audioCtx.state === 'suspended'
+                ) {
+
+                    audioCtx.resume();
+
+                }
+
+                const osc =
+                    audioCtx.createOscillator();
+
+                const gain =
+                    audioCtx.createGain();
+
+                osc.type = type;
+
+                osc.frequency.setValueAtTime(
+                    freq,
+                    audioCtx.currentTime
+                );
+
+                gain.gain.setValueAtTime(
+                    0.05,
+                    audioCtx.currentTime
+                );
+
+                gain.gain.exponentialRampToValueAtTime(
+                    0.001,
+                    audioCtx.currentTime + duration
+                );
+
+                osc.connect(gain);
+
+                gain.connect(
+                    audioCtx.destination
+                );
+
+                osc.start();
+
+                osc.stop(
+                    audioCtx.currentTime +
+                    duration
+                );
+
+            } catch (e) {
+
+                console.log(
+                    'Audio playback restricted',
+                    e
+                );
+
+            }
+
+        }
+
+
+        // ==========================================
+        // BOTÓN DE MÚSICA
+        // ==========================================
+
+        function toggleAudio() {
+
+            const musicText =
+                document.getElementById(
+                    'musicText'
+                );
+
+            const musicIcon =
+                document.getElementById(
+                    'musicIcon'
+                );
+
+
+            if (!isPlaying) {
+
+                backgroundMusic
+                    .play()
+                    .then(() => {
+
+                        isPlaying = true;
+
+                        musicText.innerText =
+                            "Música: On 🎶";
+
+                        musicIcon.classList.remove(
+                            'fa-music'
+                        );
+
+                        musicIcon.classList.add(
+                            'fa-pause'
+                        );
+
+                        musicIcon.classList.add(
+                            'animate-spin'
+                        );
+
+                    })
+                    .catch(error => {
+
+                        console.log(
+                            "El navegador bloqueó la reproducción:",
+                            error
+                        );
+
+                    });
+
+            } else {
+
+                backgroundMusic.pause();
+
+                isPlaying = false;
+
+                musicText.innerText =
+                    "Música Spooky 🎵";
+
+                musicIcon.classList.remove(
+                    'fa-pause'
+                );
+
+                musicIcon.classList.add(
+                    'fa-music'
+                );
+
+                musicIcon.classList.remove(
+                    'animate-spin'
+                );
+
+            }
+
+        }
+
+
+        // ==========================================
+        // 6. START TYPEWRITER
+        // ==========================================
+
+        window.onload = function() {
+
+            startTypewriter();
+
+        };
+
+    </script>
+
+</body>
+</html>
